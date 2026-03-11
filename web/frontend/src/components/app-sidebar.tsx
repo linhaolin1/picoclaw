@@ -8,6 +8,8 @@ import {
   IconListDetails,
   IconMessageCircle,
   IconSettings,
+  IconSparkles,
+  IconTools,
 } from "@tabler/icons-react"
 import { Link, useRouterState } from "@tanstack/react-router"
 import * as React from "react"
@@ -52,6 +54,10 @@ const baseNavGroups: Omit<NavGroup, "items">[] = [
   },
   {
     label: "navigation.model_group",
+    defaultOpen: true,
+  },
+  {
+    label: "navigation.agent_group",
     defaultOpen: true,
   },
   {
@@ -121,6 +127,23 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             icon: IconChartBar,
             translateTitle: true,
           },
+          {
+            title: "navigation.skills",
+            url: "/agent/skills",
+            icon: IconSparkles,
+            translateTitle: true,
+          },
+          {
+            title: "navigation.tools",
+            url: "/agent/tools",
+            icon: IconTools,
+            translateTitle: true,
+          },
+        ],
+      },
+      {
+        ...baseNavGroups[3],
+        items: [
           {
             title: "navigation.config",
             url: "/config",

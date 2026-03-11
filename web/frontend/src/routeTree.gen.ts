@@ -14,12 +14,15 @@ import { Route as ModelsRouteImport } from './routes/models'
 import { Route as LogsRouteImport } from './routes/logs'
 import { Route as CredentialsRouteImport } from './routes/credentials'
 import { Route as ConfigRouteImport } from './routes/config'
+import { Route as AgentRouteImport } from './routes/agent'
 import { Route as ChannelsRouteRouteImport } from './routes/channels/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as LogsRequestsRouteImport } from './routes/logs.requests'
 import { Route as ConfigRawRouteImport } from './routes/config.raw'
 import { Route as ConfigLogsRouteImport } from './routes/config.logs'
 import { Route as ChannelsNameRouteImport } from './routes/channels/$name'
+import { Route as AgentToolsRouteImport } from './routes/agent/tools'
+import { Route as AgentSkillsRouteImport } from './routes/agent/skills'
 
 const StatsRoute = StatsRouteImport.update({
   id: '/stats',
@@ -44,6 +47,11 @@ const CredentialsRoute = CredentialsRouteImport.update({
 const ConfigRoute = ConfigRouteImport.update({
   id: '/config',
   path: '/config',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AgentRoute = AgentRouteImport.update({
+  id: '/agent',
+  path: '/agent',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ChannelsRouteRoute = ChannelsRouteRouteImport.update({
@@ -76,15 +84,28 @@ const ChannelsNameRoute = ChannelsNameRouteImport.update({
   path: '/$name',
   getParentRoute: () => ChannelsRouteRoute,
 } as any)
+const AgentToolsRoute = AgentToolsRouteImport.update({
+  id: '/tools',
+  path: '/tools',
+  getParentRoute: () => AgentRoute,
+} as any)
+const AgentSkillsRoute = AgentSkillsRouteImport.update({
+  id: '/skills',
+  path: '/skills',
+  getParentRoute: () => AgentRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/channels': typeof ChannelsRouteRouteWithChildren
+  '/agent': typeof AgentRouteWithChildren
   '/config': typeof ConfigRouteWithChildren
   '/credentials': typeof CredentialsRoute
   '/logs': typeof LogsRouteWithChildren
   '/models': typeof ModelsRoute
   '/stats': typeof StatsRoute
+  '/agent/skills': typeof AgentSkillsRoute
+  '/agent/tools': typeof AgentToolsRoute
   '/channels/$name': typeof ChannelsNameRoute
   '/config/logs': typeof ConfigLogsRoute
   '/config/raw': typeof ConfigRawRoute
@@ -93,11 +114,14 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/channels': typeof ChannelsRouteRouteWithChildren
+  '/agent': typeof AgentRouteWithChildren
   '/config': typeof ConfigRouteWithChildren
   '/credentials': typeof CredentialsRoute
   '/logs': typeof LogsRouteWithChildren
   '/models': typeof ModelsRoute
   '/stats': typeof StatsRoute
+  '/agent/skills': typeof AgentSkillsRoute
+  '/agent/tools': typeof AgentToolsRoute
   '/channels/$name': typeof ChannelsNameRoute
   '/config/logs': typeof ConfigLogsRoute
   '/config/raw': typeof ConfigRawRoute
@@ -107,11 +131,14 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/channels': typeof ChannelsRouteRouteWithChildren
+  '/agent': typeof AgentRouteWithChildren
   '/config': typeof ConfigRouteWithChildren
   '/credentials': typeof CredentialsRoute
   '/logs': typeof LogsRouteWithChildren
   '/models': typeof ModelsRoute
   '/stats': typeof StatsRoute
+  '/agent/skills': typeof AgentSkillsRoute
+  '/agent/tools': typeof AgentToolsRoute
   '/channels/$name': typeof ChannelsNameRoute
   '/config/logs': typeof ConfigLogsRoute
   '/config/raw': typeof ConfigRawRoute
@@ -122,11 +149,14 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/channels'
+    | '/agent'
     | '/config'
     | '/credentials'
     | '/logs'
     | '/models'
     | '/stats'
+    | '/agent/skills'
+    | '/agent/tools'
     | '/channels/$name'
     | '/config/logs'
     | '/config/raw'
@@ -135,11 +165,14 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/channels'
+    | '/agent'
     | '/config'
     | '/credentials'
     | '/logs'
     | '/models'
     | '/stats'
+    | '/agent/skills'
+    | '/agent/tools'
     | '/channels/$name'
     | '/config/logs'
     | '/config/raw'
@@ -148,11 +181,14 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/channels'
+    | '/agent'
     | '/config'
     | '/credentials'
     | '/logs'
     | '/models'
     | '/stats'
+    | '/agent/skills'
+    | '/agent/tools'
     | '/channels/$name'
     | '/config/logs'
     | '/config/raw'
@@ -162,6 +198,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ChannelsRouteRoute: typeof ChannelsRouteRouteWithChildren
+  AgentRoute: typeof AgentRouteWithChildren
   ConfigRoute: typeof ConfigRouteWithChildren
   CredentialsRoute: typeof CredentialsRoute
   LogsRoute: typeof LogsRouteWithChildren
@@ -206,6 +243,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ConfigRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/agent': {
+      id: '/agent'
+      path: '/agent'
+      fullPath: '/agent'
+      preLoaderRoute: typeof AgentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/channels': {
       id: '/channels'
       path: '/channels'
@@ -248,6 +292,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ChannelsNameRouteImport
       parentRoute: typeof ChannelsRouteRoute
     }
+    '/agent/tools': {
+      id: '/agent/tools'
+      path: '/tools'
+      fullPath: '/agent/tools'
+      preLoaderRoute: typeof AgentToolsRouteImport
+      parentRoute: typeof AgentRoute
+    }
+    '/agent/skills': {
+      id: '/agent/skills'
+      path: '/skills'
+      fullPath: '/agent/skills'
+      preLoaderRoute: typeof AgentSkillsRouteImport
+      parentRoute: typeof AgentRoute
+    }
   }
 }
 
@@ -262,6 +320,18 @@ const ChannelsRouteRouteChildren: ChannelsRouteRouteChildren = {
 const ChannelsRouteRouteWithChildren = ChannelsRouteRoute._addFileChildren(
   ChannelsRouteRouteChildren,
 )
+
+interface AgentRouteChildren {
+  AgentSkillsRoute: typeof AgentSkillsRoute
+  AgentToolsRoute: typeof AgentToolsRoute
+}
+
+const AgentRouteChildren: AgentRouteChildren = {
+  AgentSkillsRoute: AgentSkillsRoute,
+  AgentToolsRoute: AgentToolsRoute,
+}
+
+const AgentRouteWithChildren = AgentRoute._addFileChildren(AgentRouteChildren)
 
 interface ConfigRouteChildren {
   ConfigLogsRoute: typeof ConfigLogsRoute
@@ -289,6 +359,7 @@ const LogsRouteWithChildren = LogsRoute._addFileChildren(LogsRouteChildren)
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ChannelsRouteRoute: ChannelsRouteRouteWithChildren,
+  AgentRoute: AgentRouteWithChildren,
   ConfigRoute: ConfigRouteWithChildren,
   CredentialsRoute: CredentialsRoute,
   LogsRoute: LogsRouteWithChildren,
