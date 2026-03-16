@@ -245,7 +245,19 @@ func (h *Handler) exportCSV(w http.ResponseWriter, records []requestlog.RequestR
 	writer := csv.NewWriter(w)
 	defer writer.Flush()
 
-	header := []string{"timestamp", "request_id", "channel", "sender_id", "chat_id", "content", "content_length", "message_id", "media_count", "session_key", "processing_time_ms"}
+	header := []string{
+		"timestamp",
+		"request_id",
+		"channel",
+		"sender_id",
+		"chat_id",
+		"content",
+		"content_length",
+		"message_id",
+		"media_count",
+		"session_key",
+		"processing_time_ms",
+	}
 	writer.Write(header)
 
 	for _, r := range records {

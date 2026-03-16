@@ -121,12 +121,12 @@ func main() {
 	apiHandler.SetServerOptions(portNum, effectivePublic, explicitPublic, launcherCfg.AllowedCIDRs)
 
 	// Initialize requestlog Reader for stats API
-	if cfg, err := config.LoadConfig(absPath); err == nil {
-		workspacePath := cfg.WorkspacePath()
+	if loadedCfg, loadErr := config.LoadConfig(absPath); loadErr == nil {
+		workspacePath := loadedCfg.WorkspacePath()
 		logDir := filepath.Join(workspacePath, "logs", "requests")
 		// Ensure log directory exists
-		if err := os.MkdirAll(logDir, 0755); err != nil {
-			log.Printf("Warning: failed to create request log directory: %v", err)
+		if mkdirErr := os.MkdirAll(logDir, 0o755); mkdirErr != nil {
+			log.Printf("Warning: failed to create request log directory: %v", mkdirErr)
 		}
 		reader := requestlog.NewReader(logDir, 100)
 		apiHandler.SetRequestLogReader(reader)
@@ -134,10 +134,10 @@ func main() {
 
 		// Enable file logging
 		appLogDir := filepath.Join(workspacePath, "logs")
-		if err := os.MkdirAll(appLogDir, 0755); err == nil {
+		if mkdirErr := os.MkdirAll(appLogDir, 0o755); mkdirErr == nil {
 			logFile := filepath.Join(appLogDir, "launcher.log")
-			if err := logger.EnableFileLogging(logFile); err != nil {
-				log.Printf("Warning: failed to enable file logging: %v", err)
+			if fileErr := logger.EnableFileLogging(logFile); fileErr != nil {
+				log.Printf("Warning: failed to enable file logging: %v", fileErr)
 			}
 		}
 	}

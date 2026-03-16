@@ -49,7 +49,7 @@ func TestArchiver_Archive(t *testing.T) {
 
 	oldFile := filepath.Join(tmpDir, "requests-2024-01-01.jsonl")
 	content := []byte(`{"timestamp":"2024-01-01T00:00:00Z","request_id":"1","channel":"test"}` + "\n")
-	if err := os.WriteFile(oldFile, content, 0644); err != nil {
+	if err := os.WriteFile(oldFile, content, 0o644); err != nil {
 		t.Fatalf("WriteFile failed: %v", err)
 	}
 
@@ -86,7 +86,7 @@ func TestArchiver_ArchiveNoCompress(t *testing.T) {
 
 	oldFile := filepath.Join(tmpDir, "requests-2024-01-01.jsonl")
 	content := []byte(`{"timestamp":"2024-01-01T00:00:00Z","request_id":"1","channel":"test"}` + "\n")
-	if err := os.WriteFile(oldFile, content, 0644); err != nil {
+	if err := os.WriteFile(oldFile, content, 0o644); err != nil {
 		t.Fatalf("WriteFile failed: %v", err)
 	}
 
@@ -120,7 +120,7 @@ func TestArchiver_CleanupOldFiles(t *testing.T) {
 	for i := range 5 {
 		filename := filepath.Join(tmpDir, "requests-2024-01-"+padInt(i)+".jsonl")
 		content := make([]byte, 1024*1024)
-		if err := os.WriteFile(filename, content, 0644); err != nil {
+		if err := os.WriteFile(filename, content, 0o644); err != nil {
 			t.Fatalf("WriteFile failed: %v", err)
 		}
 
@@ -158,7 +158,7 @@ func TestArchiver_CompressFile(t *testing.T) {
 
 	srcFile := filepath.Join(tmpDir, "test.jsonl")
 	content := []byte(`{"test":"data"}` + "\n")
-	if err := os.WriteFile(srcFile, content, 0644); err != nil {
+	if err := os.WriteFile(srcFile, content, 0o644); err != nil {
 		t.Fatalf("WriteFile failed: %v", err)
 	}
 
@@ -198,7 +198,7 @@ func TestArchiver_ArchiveRecentFiles(t *testing.T) {
 
 	recentFile := filepath.Join(tmpDir, "requests-"+time.Now().Format("2006-01-02")+".jsonl")
 	content := []byte(`{"timestamp":"2024-01-01T00:00:00Z","request_id":"1","channel":"test"}` + "\n")
-	if err := os.WriteFile(recentFile, content, 0644); err != nil {
+	if err := os.WriteFile(recentFile, content, 0o644); err != nil {
 		t.Fatalf("WriteFile failed: %v", err)
 	}
 

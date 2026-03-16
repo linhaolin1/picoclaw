@@ -75,18 +75,18 @@ func (f *FlexibleStringSlice) UnmarshalText(text []byte) error {
 }
 
 type Config struct {
-	Agents      AgentsConfig      `json:"agents"`
-	Bindings    []AgentBinding    `json:"bindings,omitempty"`
-	Session     SessionConfig     `json:"session,omitempty"`
-	Channels    ChannelsConfig    `json:"channels"`
-	Providers   ProvidersConfig   `json:"providers,omitempty"`
-	ModelList   []ModelConfig     `json:"model_list"` // New model-centric provider configuration
-	Gateway     GatewayConfig     `json:"gateway"`
-	Tools       ToolsConfig       `json:"tools"`
-	Heartbeat   HeartbeatConfig   `json:"heartbeat"`
-	Devices     DevicesConfig     `json:"devices"`
-	Voice       VoiceConfig       `json:"voice"`
-	RequestLog  RequestLogConfig  `json:"request_log,omitempty"`
+	Agents     AgentsConfig     `json:"agents"`
+	Bindings   []AgentBinding   `json:"bindings,omitempty"`
+	Session    SessionConfig    `json:"session,omitempty"`
+	Channels   ChannelsConfig   `json:"channels"`
+	Providers  ProvidersConfig  `json:"providers,omitempty"`
+	ModelList  []ModelConfig    `json:"model_list"` // New model-centric provider configuration
+	Gateway    GatewayConfig    `json:"gateway"`
+	Tools      ToolsConfig      `json:"tools"`
+	Heartbeat  HeartbeatConfig  `json:"heartbeat"`
+	Devices    DevicesConfig    `json:"devices"`
+	Voice      VoiceConfig      `json:"voice"`
+	RequestLog RequestLogConfig `json:"request_log,omitempty"`
 	// BuildInfo contains build-time version information
 	BuildInfo BuildInfo `json:"build_info,omitempty"`
 }

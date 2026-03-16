@@ -21,11 +21,11 @@ type MessageBus struct {
 	done          chan struct{}
 	closed        atomic.Bool
 
-	inboundMu      sync.RWMutex
-	inboundSubs    []chan InboundMessage
-	outboundMu     sync.RWMutex
-	outboundSubs   []chan OutboundMessage
-	outboundMediaMu sync.RWMutex
+	inboundMu         sync.RWMutex
+	inboundSubs       []chan InboundMessage
+	outboundMu        sync.RWMutex
+	outboundSubs      []chan OutboundMessage
+	outboundMediaMu   sync.RWMutex
 	outboundMediaSubs []chan OutboundMediaMessage
 }
 

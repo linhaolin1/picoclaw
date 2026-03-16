@@ -48,8 +48,8 @@ func TestStorage_WriteAndQuery(t *testing.T) {
 		t.Fatalf("json.Marshal failed: %v", err)
 	}
 
-	if err := storage.Write(data); err != nil {
-		t.Fatalf("Write failed: %v", err)
+	if writeErr := storage.Write(data); writeErr != nil {
+		t.Fatalf("Write failed: %v", writeErr)
 	}
 
 	records, err := storage.Query(QueryOptions{Limit: 10})
@@ -108,8 +108,12 @@ func TestStorage_QueryWithFilter(t *testing.T) {
 			expected: 1,
 		},
 		{
-			name:     "filter by time range",
-			opts:     QueryOptions{StartTime: now.Add(-90 * time.Minute), EndTime: now.Add(10 * time.Minute), Limit: 10},
+			name: "filter by time range",
+			opts: QueryOptions{
+				StartTime: now.Add(-90 * time.Minute),
+				EndTime:   now.Add(10 * time.Minute),
+				Limit:     10,
+			},
 			expected: 2,
 		},
 		{

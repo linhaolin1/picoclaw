@@ -204,7 +204,7 @@ func TestHandlePutRequestLogConfig(t *testing.T) {
 func TestHandleArchiveNow(t *testing.T) {
 	tmpDir := t.TempDir()
 	logDir := filepath.Join(tmpDir, "logs", "requests")
-	os.MkdirAll(logDir, 0755)
+	os.MkdirAll(logDir, 0o755)
 
 	logger := requestlog.NewLogger(requestlog.DefaultConfig(), nil, tmpDir)
 

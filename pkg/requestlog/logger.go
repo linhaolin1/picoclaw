@@ -14,6 +14,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+
 	"github.com/sipeed/picoclaw/pkg/bus"
 	"github.com/sipeed/picoclaw/pkg/logger"
 )
@@ -124,54 +125,7 @@ func (r *Reader) GetStats(startTime, endTime time.Time) (map[string]any, error) 
 		return nil, err
 	}
 
-	byChannel := make(map[string]int)
-	byDay := make(map[string]int)
-	topSenders := make(map[string]int)
-
-	for _, rec := range records {
-		byChannel[rec.Channel]++
-
-		day := rec.Timestamp.Format("2006-01-02")
-		byDay[day]++
-
-		senderKey := rec.SenderID + ":" + rec.Channel
-		topSenders[senderKey]++
-	}
-
-	result := map[string]any{
-		"total":      len(records),
-		"by_channel": byChannel,
-		"by_day":     byDay,
-	}
-
-	type senderStat struct {
-		Sender  string `json:"sender"`
-		Channel string `json:"channel"`
-		Count   int    `json:"count"`
-	}
-
-	var topList []senderStat
-	for k, v := range topSenders {
-		parts := strings.SplitN(k, ":", 2)
-		if len(parts) == 2 {
-			topList = append(topList, senderStat{
-				Sender:  parts[0],
-				Channel: parts[1],
-				Count:   v,
-			})
-		}
-	}
-
-	sort.Slice(topList, func(i, j int) bool {
-		return topList[i].Count > topList[j].Count
-	})
-
-	if len(topList) > 10 {
-		topList = topList[:10]
-	}
-	result["top_senders"] = topList
-
-	return result, nil
+	return calculateStats(records), nil
 }
 
 func (l *Logger) GetConfig() Config {
@@ -306,7 +260,7 @@ func NewStorage(logDir string, maxFileSizeMB int) *Storage {
 }
 
 func (s *Storage) Init() error {
-	if err := os.MkdirAll(s.logDir, 0755); err != nil {
+	if err := os.MkdirAll(s.logDir, 0o755); err != nil {
 		return err
 	}
 	return s.rotateFile()
@@ -346,7 +300,7 @@ func (s *Storage) rotateFile() error {
 	dateStr := time.Now().Format("2006-01-02")
 	filename := filepath.Join(s.logDir, "requests-"+dateStr+".jsonl")
 
-	f, err := os.OpenFile(filename, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	f, err := os.OpenFile(filename, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0o644)
 	if err != nil {
 		return err
 	}
@@ -371,15 +325,55 @@ func (s *Storage) Close() error {
 	return nil
 }
 
-func fileExists(path string) (bool, error) {
-	_, err := os.Stat(path)
-	if err == nil {
-		return true, nil
+func calculateStats(records []RequestRecord) map[string]any {
+	byChannel := make(map[string]int)
+	byDay := make(map[string]int)
+	topSenders := make(map[string]int)
+
+	for _, rec := range records {
+		byChannel[rec.Channel]++
+
+		day := rec.Timestamp.Format("2006-01-02")
+		byDay[day]++
+
+		senderKey := rec.SenderID + ":" + rec.Channel
+		topSenders[senderKey]++
 	}
-	if os.IsNotExist(err) {
-		return false, nil
+
+	result := map[string]any{
+		"total":      len(records),
+		"by_channel": byChannel,
+		"by_day":     byDay,
 	}
-	return false, err
+
+	type senderStat struct {
+		Sender  string `json:"sender"`
+		Channel string `json:"channel"`
+		Count   int    `json:"count"`
+	}
+
+	var topList []senderStat
+	for k, v := range topSenders {
+		parts := strings.SplitN(k, ":", 2)
+		if len(parts) == 2 {
+			topList = append(topList, senderStat{
+				Sender:  parts[0],
+				Channel: parts[1],
+				Count:   v,
+			})
+		}
+	}
+
+	sort.Slice(topList, func(i, j int) bool {
+		return topList[i].Count > topList[j].Count
+	})
+
+	if len(topList) > 10 {
+		topList = topList[:10]
+	}
+	result["top_senders"] = topList
+
+	return result
 }
 
 type QueryOptions struct {
@@ -550,52 +544,5 @@ func (l *Logger) GetStats(startTime, endTime time.Time) (map[string]any, error) 
 		return nil, err
 	}
 
-	byChannel := make(map[string]int)
-	byDay := make(map[string]int)
-	topSenders := make(map[string]int)
-
-	for _, r := range records {
-		byChannel[r.Channel]++
-
-		day := r.Timestamp.Format("2006-01-02")
-		byDay[day]++
-
-		senderKey := r.SenderID + ":" + r.Channel
-		topSenders[senderKey]++
-	}
-
-	result := map[string]any{
-		"total":      len(records),
-		"by_channel": byChannel,
-		"by_day":     byDay,
-	}
-
-	type senderStat struct {
-		Sender  string `json:"sender"`
-		Channel string `json:"channel"`
-		Count   int    `json:"count"`
-	}
-
-	var topList []senderStat
-	for k, v := range topSenders {
-		parts := strings.SplitN(k, ":", 2)
-		if len(parts) == 2 {
-			topList = append(topList, senderStat{
-				Sender:  parts[0],
-				Channel: parts[1],
-				Count:   v,
-			})
-		}
-	}
-
-	sort.Slice(topList, func(i, j int) bool {
-		return topList[i].Count > topList[j].Count
-	})
-
-	if len(topList) > 10 {
-		topList = topList[:10]
-	}
-	result["top_senders"] = topList
-
-	return result, nil
+	return calculateStats(records), nil
 }

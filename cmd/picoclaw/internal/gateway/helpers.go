@@ -68,8 +68,8 @@ func gatewayCmd(debug bool) error {
 	// Initialize request logger
 	requestLogger := requestlog.NewLogger(requestlog.DefaultConfig(), msgBus, cfg.WorkspacePath())
 	fmt.Printf("  • Request log dir: %s\n", requestLogger.LogDir())
-	if err := requestLogger.Start(); err != nil {
-		fmt.Printf("  ⚠️ Failed to start request logger: %v\n", err)
+	if startErr := requestLogger.Start(); startErr != nil {
+		fmt.Printf("  ⚠️ Failed to start request logger: %v\n", startErr)
 	}
 
 	agentLoop := agent.NewAgentLoop(cfg, msgBus, provider)
