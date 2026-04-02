@@ -271,10 +271,16 @@ func (c *VKChannel) processAttachments(attachments []object.MessagesMessageAttac
 			} else {
 				parts = append(parts, "[document]")
 			}
+		case "audio_message":
+			parts = append(parts, "[voice]")
 		case "sticker":
 			parts = append(parts, "[sticker]")
 		}
 	}
 
 	return strings.Join(parts, " ")
+}
+
+func (c *VKChannel) VoiceCapabilities() channels.VoiceCapabilities {
+	return channels.VoiceCapabilities{ASR: true, TTS: true}
 }

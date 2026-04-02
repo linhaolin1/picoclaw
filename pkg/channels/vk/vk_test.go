@@ -203,6 +203,11 @@ func TestVKChannel_ProcessAttachments(t *testing.T) {
 			want:        "[sticker]",
 		},
 		{
+			name:        "audio_message attachment",
+			attachments: []string{"audio_message"},
+			want:        "[voice]",
+		},
+		{
 			name:        "multiple attachments",
 			attachments: []string{"photo", "video", "audio"},
 			want:        "[photo] [video] [audio]",
@@ -216,11 +221,40 @@ func TestVKChannel_ProcessAttachments(t *testing.T) {
 				if i > 0 {
 					result += " "
 				}
-				result += "[" + att + "]"
+				if att == "audio_message" {
+					result += "[voice]"
+				} else {
+					result += "[" + att + "]"
+				}
 			}
 			if result != tt.want {
 				t.Errorf("processAttachments() = %q, want %q", result, tt.want)
 			}
 		})
+	}
+}
+
+func TestVKChannel_VoiceCapabilities(t *testing.T) {
+	msgBus := bus.NewMessageBus()
+	cfg := &config.Config{
+		Channels: config.ChannelsConfig{
+			VK: config.VKConfig{
+				Enabled: true,
+				Token:   *config.NewSecureString("test_token"),
+				GroupID: 123456789,
+			},
+		},
+	}
+	ch, err := NewVKChannel(cfg, msgBus)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	caps := ch.VoiceCapabilities()
+	if !caps.ASR {
+		t.Error("VoiceCapabilities().ASR should be true")
+	}
+	if !caps.TTS {
+		t.Error("VoiceCapabilities().TTS should be true")
 	}
 }
