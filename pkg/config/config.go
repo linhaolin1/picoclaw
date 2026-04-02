@@ -293,6 +293,7 @@ type ChannelsConfig struct {
 	Pico       PicoConfig       `json:"pico"        yaml:"pico,omitempty"`
 	PicoClient PicoClientConfig `json:"pico_client" yaml:"pico_client,omitempty"`
 	IRC        IRCConfig        `json:"irc"         yaml:"irc,omitempty"`
+	VK         VKConfig         `json:"vk"          yaml:"vk,omitempty"`
 }
 
 // GroupTriggerConfig controls when the bot responds in group chats.
@@ -545,6 +546,21 @@ type IRCConfig struct {
 	GroupTrigger       GroupTriggerConfig  `json:"group_trigger,omitempty"    yaml:"-"`
 	Typing             TypingConfig        `json:"typing,omitempty"           yaml:"-"`
 	ReasoningChannelID string              `json:"reasoning_channel_id"       yaml:"-"`
+}
+
+type VKConfig struct {
+	Enabled            bool                `json:"enabled"              yaml:"-"               env:"PICOCLAW_CHANNELS_VK_ENABLED"`
+	Token              SecureString        `json:"token,omitzero"       yaml:"token,omitempty" env:"PICOCLAW_CHANNELS_VK_TOKEN"`
+	GroupID            int                 `json:"group_id"             yaml:"-"               env:"PICOCLAW_CHANNELS_VK_GROUP_ID"`
+	AllowFrom          FlexibleStringSlice `json:"allow_from"           yaml:"-"               env:"PICOCLAW_CHANNELS_VK_ALLOW_FROM"`
+	GroupTrigger       GroupTriggerConfig  `json:"group_trigger,omitempty" yaml:"-"`
+	Typing             TypingConfig        `json:"typing,omitempty"     yaml:"-"`
+	Placeholder        PlaceholderConfig   `json:"placeholder,omitempty" yaml:"-"`
+	ReasoningChannelID string              `json:"reasoning_channel_id" yaml:"-"               env:"PICOCLAW_CHANNELS_VK_REASONING_CHANNEL_ID"`
+}
+
+func (c *VKConfig) SetToken(token string) {
+	c.Token = *NewSecureString(token)
 }
 
 type HeartbeatConfig struct {
