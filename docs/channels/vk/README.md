@@ -89,8 +89,18 @@ export PICOCLAW_CHANNELS_VK_TOKEN="vk1.a.abc123..."
 - **Photos**: Photos are displayed as `[photo]` placeholder
 - **Videos**: Videos are displayed as `[video]` placeholder
 - **Audio**: Audio files are displayed as `[audio]` placeholder
+- **Voice messages**: Voice messages are displayed as `[voice]` placeholder and support transcription
 - **Documents**: Documents are displayed as `[document: filename]`
 - **Stickers**: Stickers are displayed as `[sticker]` placeholder
+
+### Voice Support
+
+The VK channel supports both voice message reception and text-to-speech capabilities:
+
+- **ASR (Automatic Speech Recognition)**: Voice messages can be transcribed to text using configured voice models
+- **TTS (Text-to-Speech)**: Text responses can be converted to voice messages
+
+To enable voice transcription, configure a voice model in your providers setup. See [Voice Transcription](../../providers.md#voice-transcription) for details.
 
 ### Group Chat Support
 
