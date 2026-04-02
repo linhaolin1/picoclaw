@@ -9,7 +9,7 @@ The VK channel uses Bots Long Poll API for bot-based communication with VK socia
   "channels": {
     "vk": {
       "enabled": true,
-      "token": "your_vk_access_token",
+      "token": "NOT_HERE",
       "group_id": 123456789,
       "allow_from": ["123456789"],
       "group_trigger": {
@@ -24,10 +24,24 @@ The VK channel uses Bots Long Poll API for bot-based communication with VK socia
 | Field            | Type   | Required | Description                                                        |
 | ---------------- | ------ | -------- | ------------------------------------------------------------------ |
 | enabled          | bool   | Yes      | Whether to enable the VK channel                                   |
-| token            | string | Yes      | VK Community Access Token                                          |
+| token            | string | Yes      | Set to `NOT_HERE` - token is stored securely (see Token Storage)   |
 | group_id         | int    | Yes      | VK Community ID (Group ID)                                         |
 | allow_from       | array  | No       | Allowlist of user IDs; empty means all users are allowed           |
 | group_trigger    | object | No       | Configuration for group chat triggers                              |
+
+### Token Storage
+
+For security reasons, the VK access token should not be stored directly in the configuration file. Instead:
+
+1. Set `token` to `"NOT_HERE"` in the configuration
+2. Store the actual token using one of these methods:
+   - **Environment variable**: Set `PICOCLAW_CHANNELS_VK_TOKEN` environment variable
+   - **Secure storage**: Use PicoClaw's secure token storage mechanism
+
+Example using environment variable:
+```bash
+export PICOCLAW_CHANNELS_VK_TOKEN="vk1.a.abc123..."
+```
 
 ### Group Trigger Configuration
 
@@ -59,6 +73,7 @@ The VK channel uses Bots Long Poll API for bot-based communication with VK socia
    - `photos` - Access to photos (optional)
    - `docs` - Access to documents (optional)
 4. Copy the generated access token
+5. Store the token securely (see Token Storage section below)
 
 ### 4. Configure PicoClaw
 
@@ -98,7 +113,7 @@ VK has a maximum message length of 4000 characters. PicoClaw automatically split
   "channels": {
     "vk": {
       "enabled": true,
-      "token": "vk1.a.abc123...",
+      "token": "NOT_HERE",
       "group_id": 123456789
     }
   }
@@ -112,7 +127,7 @@ VK has a maximum message length of 4000 characters. PicoClaw automatically split
   "channels": {
     "vk": {
       "enabled": true,
-      "token": "vk1.a.abc123...",
+      "token": "NOT_HERE",
       "group_id": 123456789,
       "allow_from": ["123456789", "987654321"]
     }
@@ -127,7 +142,7 @@ VK has a maximum message length of 4000 characters. PicoClaw automatically split
   "channels": {
     "vk": {
       "enabled": true,
-      "token": "vk1.a.abc123...",
+      "token": "NOT_HERE",
       "group_id": 123456789,
       "group_trigger": {
         "prefixes": ["/bot", "!bot"]
