@@ -549,14 +549,14 @@ type IRCConfig struct {
 }
 
 type VKConfig struct {
-	Enabled            bool                `json:"enabled"              yaml:"-"               env:"PICOCLAW_CHANNELS_VK_ENABLED"`
-	Token              SecureString        `json:"token,omitzero"       yaml:"token,omitempty" env:"PICOCLAW_CHANNELS_VK_TOKEN"`
-	GroupID            int                 `json:"group_id"             yaml:"-"               env:"PICOCLAW_CHANNELS_VK_GROUP_ID"`
-	AllowFrom          FlexibleStringSlice `json:"allow_from"           yaml:"-"               env:"PICOCLAW_CHANNELS_VK_ALLOW_FROM"`
+	Enabled            bool                `json:"enabled" yaml:"-" env:"PICOCLAW_CHANNELS_VK_ENABLED"`
+	Token              SecureString        `json:"token,omitzero" yaml:"token,omitempty" env:"PICOCLAW_CHANNELS_VK_TOKEN"`
+	GroupID            int                 `json:"group_id" yaml:"-" env:"PICOCLAW_CHANNELS_VK_GROUP_ID"`
+	AllowFrom          FlexibleStringSlice `json:"allow_from" yaml:"-" env:"PICOCLAW_CHANNELS_VK_ALLOW_FROM"`
 	GroupTrigger       GroupTriggerConfig  `json:"group_trigger,omitempty" yaml:"-"`
-	Typing             TypingConfig        `json:"typing,omitempty"     yaml:"-"`
+	Typing             TypingConfig        `json:"typing,omitempty" yaml:"-"`
 	Placeholder        PlaceholderConfig   `json:"placeholder,omitempty" yaml:"-"`
-	ReasoningChannelID string              `json:"reasoning_channel_id" yaml:"-"               env:"PICOCLAW_CHANNELS_VK_REASONING_CHANNEL_ID"`
+	ReasoningChannelID string              `json:"reasoning_channel_id" yaml:"-" env:"PICOCLAW_CHANNELS_VK_REASONING_CHANNEL_ID"`
 }
 
 func (c *VKConfig) SetToken(token string) {

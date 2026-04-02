@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
-	"sync"
 
 	"github.com/SevereCloud/vksdk/v3/api"
 	"github.com/SevereCloud/vksdk/v3/api/params"
@@ -27,7 +26,6 @@ type VKChannel struct {
 	config *config.Config
 	ctx    context.Context
 	cancel context.CancelFunc
-	mu     sync.Mutex
 }
 
 func NewVKChannel(cfg *config.Config, bus *bus.MessageBus) (*VKChannel, error) {
@@ -242,15 +240,6 @@ func (c *VKChannel) isMentioned(msg object.MessagesMessage) bool {
 
 func (c *VKChannel) stripBotMention(text string) string {
 	return strings.TrimSpace(text)
-}
-
-func (c *VKChannel) stripPrefix(text string, prefixes []string) string {
-	for _, prefix := range prefixes {
-		if strings.HasPrefix(text, prefix) {
-			return strings.TrimSpace(strings.TrimPrefix(text, prefix))
-		}
-	}
-	return text
 }
 
 func (c *VKChannel) getUserName(userID int) string {
